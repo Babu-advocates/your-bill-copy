@@ -6,33 +6,31 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DocumentPreview } from './DocumentPreview';
-import { Plus, Trash2, Eye, Printer, Save, ArrowLeft } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Plus, Trash2, Eye, Printer, ArrowLeft } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 
-interface CreateBillFormProps {
+interface CreateQuotationFormProps {
   onBack: () => void;
 }
 
-export function CreateBillForm({ onBack }: CreateBillFormProps) {
-  const { addBill, companyInfo, getNextInvoiceNumber } = useBills();
-  const { toast } = useToast();
-  const invoiceRef = useRef<HTMLDivElement>(null);
+export function CreateQuotationForm({ onBack }: CreateQuotationFormProps) {
+  const { companyInfo } = useBills();
+  const quotationRef = useRef<HTMLDivElement>(null);
   
   const [customerName, setCustomerName] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [quotationNumber, setQuotationNumber] = useState(1);
   const [items, setItems] = useState<BillItem[]>([
     { id: crypto.randomUUID(), description: '', price: 0 }
   ]);
   const [showPreview, setShowPreview] = useState(false);
 
-  const invoiceNumber = getNextInvoiceNumber();
   const total = items.reduce((sum, item) => sum + item.price, 0);
 
   const handlePrint = useReactToPrint({
-    contentRef: invoiceRef,
-    documentTitle: `Invoice-${invoiceNumber}`,
+    contentRef: quotationRef,
+    documentTitle: `Quotation-${quotationNumber}`,
   });
 
   const addItem = () => {
@@ -51,48 +49,9 @@ export function CreateBillForm({ onBack }: CreateBillFormProps) {
     ));
   };
 
-  const [saving, setSaving] = useState(false);
-
-  const handleSave = async () => {
-    if (!customerName.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter customer name",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (items.some(item => !item.description.trim())) {
-      toast({
-        title: "Error",
-        description: "Please fill in all item descriptions",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setSaving(true);
-    try {
-      await addBill({
-        invoiceNumber,
-        date,
-        customerName,
-        customerAddress,
-        items,
-        total,
-      });
-      onBack();
-    } catch (error) {
-      // Error toast is shown in context
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const currentBill = {
+  const currentQuotation = {
     id: 'preview',
-    invoiceNumber,
+    invoiceNumber: quotationNumber,
     date,
     customerName: customerName || 'Customer Name',
     customerAddress,
@@ -111,14 +70,10 @@ export function CreateBillForm({ onBack }: CreateBillFormProps) {
           </Button>
           <Button onClick={() => handlePrint()} className="btn-primary-gradient">
             <Printer className="w-4 h-4 mr-2" />
-            Print Invoice
-          </Button>
-          <Button onClick={handleSave} variant="secondary" disabled={saving}>
-            <Save className="w-4 h-4 mr-2" />
-            {saving ? 'Saving...' : 'Save Invoice'}
+            Print Quotation
           </Button>
         </div>
-        <DocumentPreview ref={invoiceRef} bill={currentBill} companyInfo={companyInfo} type="invoice" />
+        <DocumentPreview ref={quotationRef} bill={currentQuotation} companyInfo={companyInfo} type="quotation" />
       </div>
     );
   }
@@ -131,16 +86,15 @@ export function CreateBillForm({ onBack }: CreateBillFormProps) {
           Back
         </Button>
         <h2 className="font-display text-2xl font-bold text-primary">
-          Create New Invoice
+          Create New Quotation
         </h2>
-        <span className="text-muted-foreground">#{invoiceNumber}</span>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Form */}
         <Card className="card-hover">
           <CardHeader>
-            <CardTitle className="font-display">Invoice Details</CardTitle>
+            <CardTitle className="font-display">Quotation Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
@@ -163,15 +117,27 @@ export function CreateBillForm({ onBack }: CreateBillFormProps) {
                 />
               </div>
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="customerAddress">Customer Address (Optional)</Label>
-              <Input
-                id="customerAddress"
-                value={customerAddress}
-                onChange={(e) => setCustomerAddress(e.target.value)}
-                placeholder="Enter customer address"
-              />
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="quotationNumber">Quotation Number</Label>
+                <Input
+                  id="quotationNumber"
+                  type="number"
+                  value={quotationNumber}
+                  onChange={(e) => setQuotationNumber(Number(e.target.value))}
+                  placeholder="1"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="customerAddress">Customer Address (Optional)</Label>
+                <Input
+                  id="customerAddress"
+                  value={customerAddress}
+                  onChange={(e) => setCustomerAddress(e.target.value)}
+                  placeholder="Enter customer address"
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -231,11 +197,7 @@ export function CreateBillForm({ onBack }: CreateBillFormProps) {
       <div className="flex gap-4 justify-end">
         <Button variant="outline" onClick={() => setShowPreview(true)}>
           <Eye className="w-4 h-4 mr-2" />
-          Preview Invoice
-        </Button>
-        <Button onClick={handleSave} className="btn-primary-gradient" disabled={saving}>
-          <Save className="w-4 h-4 mr-2" />
-          {saving ? 'Saving...' : 'Save Invoice'}
+          Preview Quotation
         </Button>
       </div>
     </div>
