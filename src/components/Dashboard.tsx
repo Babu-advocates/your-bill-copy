@@ -3,12 +3,13 @@ import { useBills } from '@/context/BillContext';
 import { Logo } from './Logo';
 import { BillsList } from './BillsList';
 import { CreateBillForm } from './CreateBillForm';
+import { CreateQuotationForm } from './CreateQuotationForm';
 import { SettingsForm } from './SettingsForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Plus, Settings, FileText, IndianRupee } from 'lucide-react';
+import { Plus, Settings, FileText, IndianRupee, FileQuestion } from 'lucide-react';
 
-type View = 'dashboard' | 'create' | 'settings';
+type View = 'dashboard' | 'create' | 'settings' | 'quotation';
 
 export function Dashboard() {
   const [view, setView] = useState<View>('dashboard');
@@ -21,6 +22,10 @@ export function Dashboard() {
     return <CreateBillForm onBack={() => setView('dashboard')} />;
   }
 
+  if (view === 'quotation') {
+    return <CreateQuotationForm onBack={() => setView('dashboard')} />;
+  }
+
   if (view === 'settings') {
     return <SettingsForm onBack={() => setView('dashboard')} />;
   }
@@ -30,10 +35,14 @@ export function Dashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <Logo size="md" />
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button variant="outline" onClick={() => setView('settings')}>
             <Settings className="w-4 h-4 mr-2" />
             Settings
+          </Button>
+          <Button variant="secondary" onClick={() => setView('quotation')}>
+            <FileQuestion className="w-4 h-4 mr-2" />
+            New Quotation
           </Button>
           <Button onClick={() => setView('create')} className="btn-primary-gradient">
             <Plus className="w-4 h-4 mr-2" />
