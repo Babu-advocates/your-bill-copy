@@ -215,7 +215,7 @@ export function BillsList() {
 
       {/* Hidden Invoice for Direct Download */}
       {billToDownload && (
-        <div style={{ position: 'absolute', left: 0, top: 0, width: '210mm', opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
+        <div className="fixed left-[-9999px] top-0">
           <InvoicePreview ref={hiddenInvoiceRef} bill={billToDownload} companyInfo={companyInfo} />
         </div>
       )}
@@ -246,8 +246,8 @@ export function BillsList() {
                 </Button>
               </div>
             </div>
-            <div className="p-2 md:p-4 overflow-auto flex justify-center">
-              <div className="w-[210mm] max-w-full transform origin-top scale-[0.4] sm:scale-[0.6] md:scale-[0.8] lg:scale-100">
+            <div className="p-2 md:p-4 overflow-x-auto">
+              <div className="min-w-[210mm] transform origin-top-left scale-[0.45] sm:scale-[0.6] md:scale-[0.8] lg:scale-100" style={{ width: 'fit-content' }}>
                 <InvoicePreview ref={invoiceRef} bill={selectedBill} companyInfo={companyInfo} />
               </div>
             </div>
