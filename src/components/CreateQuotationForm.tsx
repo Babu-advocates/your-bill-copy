@@ -7,7 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DocumentPreview } from './DocumentPreview';
 import { Plus, Trash2, Eye, Download, ArrowLeft } from 'lucide-react';
-import { useReactToPrint } from 'react-to-print';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { useToast } from '@/hooks/use-toast';
 
 interface CreateQuotationFormProps {
   onBack: () => void;
@@ -15,6 +17,7 @@ interface CreateQuotationFormProps {
 
 export function CreateQuotationForm({ onBack }: CreateQuotationFormProps) {
   const { companyInfo } = useBills();
+  const { toast } = useToast();
   const quotationRef = useRef<HTMLDivElement>(null);
   
   const [customerName, setCustomerName] = useState('');
@@ -25,13 +28,49 @@ export function CreateQuotationForm({ onBack }: CreateQuotationFormProps) {
     { id: crypto.randomUUID(), description: '', price: 0 }
   ]);
   const [showPreview, setShowPreview] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const total = items.reduce((sum, item) => sum + item.price, 0);
 
-  const handlePrint = useReactToPrint({
-    contentRef: quotationRef,
-    documentTitle: `Quotation-${quotationNumber}`,
-  });
+  const handleDownloadPDF = async () => {
+    if (!quotationRef.current) return;
+    
+    setDownloading(true);
+    try {
+      const canvas = await html2canvas(quotationRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`Quotation-${quotationNumber}.pdf`);
+      
+      toast({
+        title: "Success",
+        description: "Quotation downloaded as PDF",
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF",
+        variant: "destructive",
+      });
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const addItem = () => {
     setItems([...items, { id: crypto.randomUUID(), description: '', price: 0 }]);
@@ -68,9 +107,9 @@ export function CreateQuotationForm({ onBack }: CreateQuotationFormProps) {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Edit
           </Button>
-          <Button onClick={() => handlePrint()} className="btn-primary-gradient">
+          <Button onClick={handleDownloadPDF} className="btn-primary-gradient" disabled={downloading}>
             <Download className="w-4 h-4 mr-2" />
-            Download
+            {downloading ? 'Downloading...' : 'Download'}
           </Button>
         </div>
         <DocumentPreview ref={quotationRef} bill={currentQuotation} companyInfo={companyInfo} type="quotation" />
