@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DocumentPreview } from './DocumentPreview';
-import { Plus, Trash2, Eye, Printer, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, Eye, Download, ArrowLeft } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 
 interface CreateQuotationFormProps {
@@ -69,8 +69,8 @@ export function CreateQuotationForm({ onBack }: CreateQuotationFormProps) {
             Back to Edit
           </Button>
           <Button onClick={() => handlePrint()} className="btn-primary-gradient">
-            <Printer className="w-4 h-4 mr-2" />
-            Print Quotation
+            <Download className="w-4 h-4 mr-2" />
+            Download
           </Button>
         </div>
         <DocumentPreview ref={quotationRef} bill={currentQuotation} companyInfo={companyInfo} type="quotation" />
