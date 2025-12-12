@@ -215,7 +215,7 @@ export function BillsList() {
 
       {/* Hidden Invoice for Direct Download */}
       {billToDownload && (
-        <div className="fixed left-[-9999px] top-0">
+        <div style={{ position: 'absolute', left: 0, top: 0, width: '210mm', opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
           <InvoicePreview ref={hiddenInvoiceRef} bill={billToDownload} companyInfo={companyInfo} />
         </div>
       )}
