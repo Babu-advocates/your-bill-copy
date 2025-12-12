@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* MGM Jewellers Billing Software - Design System */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 270 50% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 270 50% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 270 50% 10%;
+
+    /* Purple theme matching the invoice */
+    --primary: 270 70% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 270 60% 95%;
+
+    --secondary: 270 30% 96%;
+    --secondary-foreground: 270 50% 20%;
+
+    --muted: 270 20% 96%;
+    --muted-foreground: 270 10% 45%;
+
+    --accent: 270 60% 92%;
+    --accent-foreground: 270 70% 40%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 270 20% 90%;
+    --input: 270 20% 90%;
+    --ring: 270 70% 50%;
+
+    --radius: 0.5rem;
+
+    /* Invoice specific colors - Purple matching logo */
+    --invoice-header: 270 70% 50%;
+    --invoice-accent: 280 70% 45%;
+    --invoice-table-header: 270 80% 45%;
+    --invoice-total: 275 75% 40%;
+    --invoice-watermark: 270 60% 92%;
+
+    /* Gold accent for jewellery theme */
+    --gold: 45 90% 55%;
+    --gold-light: 45 80% 92%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 270 50% 20%;
+    --sidebar-primary: 270 70% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 60% 95%;
+    --sidebar-accent-foreground: 270 50% 20%;
+    --sidebar-border: 270 20% 90%;
+    --sidebar-ring: 270 70% 50%;
+
+    /* Typography */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  .dark {
+    --background: 270 30% 8%;
+    --foreground: 270 10% 95%;
+
+    --card: 270 30% 12%;
+    --card-foreground: 270 10% 95%;
+
+    --popover: 270 30% 12%;
+    --popover-foreground: 270 10% 95%;
+
+    --primary: 270 60% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 270 40% 20%;
+
+    --secondary: 270 20% 18%;
+    --secondary-foreground: 270 10% 90%;
+
+    --muted: 270 20% 18%;
+    --muted-foreground: 270 10% 60%;
+
+    --accent: 270 30% 22%;
+    --accent-foreground: 270 60% 70%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 270 20% 22%;
+    --input: 270 20% 22%;
+    --ring: 270 60% 60%;
+
+    --sidebar-background: 270 30% 10%;
+    --sidebar-foreground: 270 10% 90%;
+    --sidebar-primary: 270 60% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 30% 18%;
+    --sidebar-accent-foreground: 270 10% 90%;
+    --sidebar-border: 270 20% 22%;
+    --sidebar-ring: 270 60% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  .invoice-container {
+    @apply bg-card shadow-xl;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .invoice-header {
+    @apply flex justify-between items-start pb-4 border-b-2;
+    border-color: hsl(var(--primary));
+  }
+
+  .invoice-table-header {
+    background: linear-gradient(135deg, hsl(var(--invoice-table-header)), hsl(var(--primary)));
+    @apply text-primary-foreground font-semibold;
+  }
+
+  .invoice-total-row {
+    background: hsl(var(--invoice-total));
+    @apply text-primary-foreground font-bold;
+  }
+
+  .invoice-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8rem;
+    font-weight: 700;
+    color: hsl(var(--invoice-watermark));
+    opacity: 0.3;
+    pointer-events: none;
+    white-space: nowrap;
+    font-family: var(--font-display);
+  }
+
+  .btn-primary-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--invoice-accent)));
+    @apply text-primary-foreground hover:opacity-90 transition-opacity;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .text-gold {
+    color: hsl(var(--gold));
+  }
+
+  .bg-gold {
+    background-color: hsl(var(--gold));
+  }
+
+  .bg-gold-light {
+    background-color: hsl(var(--gold-light));
+  }
+
+  .bg-primary-light {
+    background-color: hsl(var(--primary-light));
+  }
+}
+
+/* Print styles for invoice */
+@media print {
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .invoice-container {
+    box-shadow: none;
+    margin: 0;
+    max-width: 100%;
+  }
+}
