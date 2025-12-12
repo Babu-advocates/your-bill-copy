@@ -246,8 +246,8 @@ export function BillsList() {
                 </Button>
               </div>
             </div>
-            <div className="p-2 md:p-4 overflow-x-auto">
-              <div className="min-w-[210mm] transform origin-top-left scale-[0.45] sm:scale-[0.6] md:scale-[0.8] lg:scale-100" style={{ width: 'fit-content' }}>
+            <div className="p-2 md:p-4 overflow-auto flex justify-center">
+              <div className="w-[210mm] max-w-full transform origin-top scale-[0.4] sm:scale-[0.6] md:scale-[0.8] lg:scale-100">
                 <InvoicePreview ref={invoiceRef} bill={selectedBill} companyInfo={companyInfo} />
               </div>
             </div>
