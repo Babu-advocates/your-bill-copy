@@ -27,7 +27,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         </div>
 
         {/* Header Section */}
-        <div className="flex flex-col sm:flex-row justify-between items-start pb-4 border-b-2 border-primary relative z-10 gap-4">
+        <div className="flex flex-row justify-between items-start pb-4 border-b-2 border-primary relative z-10">
           <div className="flex items-center gap-3 md:gap-4">
             {/* Logo */}
             <img src={techverseLogo} alt="Techverse Infotech" className="w-16 h-16 md:w-24 md:h-24 object-contain" />
@@ -36,7 +36,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             </h1>
           </div>
           
-          <div className="text-left sm:text-right">
+          <div className="text-right">
             <h2 className="font-display font-bold text-2xl md:text-4xl text-primary italic">
               INVOICE
             </h2>
@@ -45,7 +45,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         </div>
 
         {/* Contact & Invoice Info */}
-        <div className="flex flex-col sm:flex-row justify-between mt-6 md:mt-8 relative z-10 gap-4">
+        <div className="flex flex-row justify-between mt-8 relative z-10">
           <div>
             <h3 className="font-bold text-xs md:text-sm mb-2">CONTACT INFO:</h3>
             <p className="font-semibold text-sm md:text-base">{companyInfo.name}</p>
@@ -54,7 +54,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             {companyInfo.address && <p className="text-xs md:text-base">{companyInfo.address}</p>}
           </div>
           
-          <div className="text-left sm:text-right">
+          <div className="text-right">
             <p className="mb-2 md:mb-4 text-sm md:text-base">Date: {format(new Date(bill.date), 'dd/MM/yyyy')}</p>
             <div>
               <p className="font-semibold text-sm md:text-base">INVOICE TO :</p>
